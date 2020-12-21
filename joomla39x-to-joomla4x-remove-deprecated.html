@@ -1,0 +1,365 @@
+<table class="table">
+<thead>
+	<tr>
+		<th>Area</th>
+		<th>Old Code</th>
+		<th>New Code</th>
+	</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td>JApplicationHelper</td>
+	<td>
+<pre>
+
+$data = JApplicationHelper::parseXMLInstallFile(JPATH_SITE .
+'/plugins/emailalerts/abc.xml');
+</pre>
+</td>
+	<td>
+<pre>
+use Joomla\CMS\Installer\Installer;
+
+Installer::parseXMLInstallFile(JPATH_SITE .
+'/plugins/emailalerts/abc.xml');
+</pre></td>
+</tr>
+
+<tr>
+	<td>JArrayHelper</td>
+	<td>
+<pre>
+
+JArrayHelper::toInteger($pks);
+</pre>
+	</td>
+	<td>
+<pre>
+use Joomla\Utilities\ArrayHelper;
+
+ArrayHelper::toInteger($pks);
+</pre>
+	</td>
+</tr>
+
+<tr>
+	<td>JDatabase</td>
+	<td>$db->query();</td>
+	<td>$db->execute();</td>
+</tr>
+
+<tr>
+	<td>JDispatcher (plugin trigger)</td>
+	<td>
+<pre>
+
+$dispatcher = JDispatcher::getInstance();
+JPluginHelper::importPlugin('jmailalert');
+$dispatcher->trigger(
+	'jmaOnAfterAlertSubscriptionDelete',
+	array($context, (object) $subscription)
+);
+</pre>
+	</td>
+	<td>
+<pre>
+use Joomla\CMS\Plugin\PluginHelper;
+
+PluginHelper::importPlugin('jmailalert');
+Factory::getApplication()->triggerEvent(
+	'jmaOnAfterAlertSubscriptionDelete',
+	array($context, (object) $subscription)
+);
+</pre>
+	</td>
+</tr>
+
+<tr>
+	<td>JDocument</td>
+	<td>
+<pre>
+
+$document->addStyleSheet(Uri::base() .
+'/components/com_jmailalerts/assets/css/jmailalerts.css');
+</pre>
+	</td>
+	<td>
+<pre>
+use Joomla\CMS\HTML\HTMLHelper;
+
+HTMLHelper::_('stylesheet',
+'/components/com_jmailalerts/assets/css/jmailalerts.css');
+</pre>
+	</td>
+</tr>
+
+<tr>
+	<td>JDocument</td>
+	<td>
+<pre>
+
+$document->addScript(Uri::root(true) .
+'/plugins/system/tjupdates/tjupdates.js');
+</pre>
+	</td>
+	<td>
+<pre>
+use Joomla\CMS\HTML\HTMLHelper;
+
+HTMLHelper::_('script',
+'/plugins/system/tjupdates/tjupdates.js');
+</pre>
+	</td>
+</tr>
+
+<tr>
+	<td>JError</td>
+	<td>JError::raiseWarning(500, $e->getMessage());</td>
+	<td>$this->setMessage($e->getMessage(), 'error');</td>
+</tr>
+
+<tr>
+	<td>JError</td>
+	<td>
+<pre>
+
+
+JError::raiseError(500, $model->getError());
+</pre>
+	</td>
+	<td>
+<pre>
+use Joomla\CMS\Factory;
+
+$app = Factory::getApplication();
+$app->enqueueMessage($model->getError(), 'error');
+</pre>
+	</td>
+</tr>
+
+<tr>
+
+<td>JFactory</td>
+
+<td>
+
+<pre>
+$app      = JFactory::getApplication();
+$frommail = $app->getCfg('mailfrom');
+$site     = $app->getCfg('sitename');
+</pre>
+
+</td>
+
+<td>
+
+<pre>use Joomla\CMS\Factory;
+
+$app      = Factory::getApplication();
+$frommail = $app->get('mailfrom');
+$site     = $app->get('sitename');
+</pre>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>JFactory</td>
+
+<td>
+
+<pre>
+$app = JFactory::getApplication();
+if ($app->issite()) {}
+if ($app->isAdmin()) {}
+</pre>
+
+</td>
+
+<td>
+
+<pre>use Joomla\CMS\Factory;
+
+$app = Factory::getApplication();
+if ($app->isClient('site')) {}
+if ($app->isClient('administrator')) {}
+</pre>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>JFactory</td>
+
+<td>$xml = Factory::getXML(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+
+<td>$xml = simplexml_load_file(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+
+</tr>
+
+<tr>
+
+<td>JFile</td>
+
+<td>File::read($cssfile);</td>
+
+<td>file_get_contents($cssfile);</td>
+
+</tr>
+
+<tr>
+
+<td>JFormField</td>
+
+<td>
+
+<pre>class JFormFieldLegend extends JFormField
+</pre>
+
+</td>
+
+<td>
+
+<pre>use Joomla\CMS\Form\FormField;
+
+class JFormFieldLegend extends FormField
+
+			</pre>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>JHtml</td>
+
+<td>
+
+<pre>JHtml::_('behavior.tabstate');
+JHtml::_('behavior.tooltip');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.multiselect');
+JHtml::_('form.token');
+JHtml::_('formbehavior.chosen', 'select');
+JHtml::_('jquery.framework');
+JHtml::_('behavior.formvalidator');
+JHtml::_('behavior.keepalive');
+JHtml::_('searchtools.sort' ...)
+</pre>
+
+</td>
+
+<td>
+
+<pre>use Joomla\CMS\HTML\HTMLHelper;
+
+// Removed 'behavior.tabstate' in J4
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('behavior.multiselect');
+HTMLHelper::_('form.token');
+HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('jquery.framework');
+HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('behavior.keepalive');
+HTMLHelper::_('searchtools.sort'...)
+</pre>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>JParameter</td>
+
+<td>
+
+<pre>$params = new JParameter($jPlugin->params);
+</pre>
+
+</td>
+
+<td>
+
+<pre>$params = new Registry;
+$params->loadString($jPlugin->params);
+</pre>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>-</td>
+
+<td>JToolBarHelper::(...); eg: JToolBarHelper::addNew('frequency.add', 'JTOOLBAR_NEW');</td>
+
+<td>use Joomla\CMS\Toolbar\ToolbarHelper; ToolbarHelper::(...); eg: ToolbarHelper::addNew('frequency.add', 'JTOOLBAR_NEW');|</td>
+
+</tr>
+
+<tr>
+
+<td>JResponse</td>
+
+<td>$body = JResponse::getBody(); JResponse::setBody($body);</td>
+
+<td>$app = Factory::getApplication(); $body = $app->getBody(); $app->setBody($body);</td>
+
+</tr>
+
+<tr>
+
+<td>-</td>
+
+<td>jimport('joomla.installer.helper'); $queries = JInstallerHelper::splitSql($buffer);</td>
+
+<td>$queries = \JDatabaseDriver::splitSql($buffer);</td>
+
+</tr>
+
+<tr>
+
+<td>-</td>
+
+<td>
+
+<pre>if ($db->getErrorNum())
+{
+	$this->setError($db->getErrorMsg()) ;
+
+	return false;
+}
+				</pre>
+
+</td>
+
+<td>
+
+<pre>try
+{
+	$db->execute();
+}
+catch (\RuntimeException $e)
+{
+	$this->setError($e->getMessage());
+
+	return false;
+}
+				</pre>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
