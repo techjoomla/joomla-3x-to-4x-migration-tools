@@ -1,263 +1,311 @@
-<table class="table">
-<thead>
-	<tr>
-		<th>Area</th>
-		<th>Old Code</th>
-		<th>New Code</th>
-	</tr>
-</thead>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Joomla 3 to 4 - remove deprecated</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style type="text/css">
+        .table { background-color:#FFFFE0; border-collapse:collapse; width: 100%; color:#000;}
+        .table th { background-color:#BDB76B; color:white;}
+        .table td, .table th { padding:5px; border:0; }
+        .table td { border:1px dotted #BDB76B;}
+    </style>
+</head>
 
-<tbody>
-<tr>
-	<td>JApplicationHelper</td>
-	<td>
+<body>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Area</th>
+            <th>Old Code</th>
+            <th>New Code</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td>JApplicationHelper</td>
+
+            <td>
 <pre>
+
 
 $data = JApplicationHelper::parseXMLInstallFile(JPATH_SITE .
 '/plugins/emailalerts/abc.xml');
 </pre>
-</td>
-	<td>
+            </td>
+
+            <td>
 <pre>
 use Joomla\CMS\Installer\Installer;
 
 Installer::parseXMLInstallFile(JPATH_SITE .
 '/plugins/emailalerts/abc.xml');
-</pre></td>
-</tr>
+</pre>
+            </td>
+        </tr>
 
-<tr>
-	<td>JArrayHelper</td>
-	<td>
+        <tr>
+            <td>JArrayHelper</td>
+
+            <td>
 <pre>
 
 JArrayHelper::toInteger($pks);
 </pre>
-	</td>
-	<td>
+            </td>
+
+            <td>
 <pre>
 use Joomla\Utilities\ArrayHelper;
-
 ArrayHelper::toInteger($pks);
 </pre>
-	</td>
-</tr>
+            </td>
+        </tr>
 
-<tr>
-	<td>JDatabase</td>
-	<td>$db->query();</td>
-	<td>$db->execute();</td>
-</tr>
+        <tr>
+            <td>JDatabase</td>
+            <td>$db->query();</td>
+            <td>$db->execute();</td>
+        </tr>
 
-<tr>
-	<td>JDispatcher (plugin trigger)</td>
-	<td>
+        <tr>
+            <td>JDatabase</td>
+
+            <td>
+<pre>
+if ($db->getErrorNum())
+{
+    $this->setError($db->getErrorMsg()) ;
+
+    return false;
+}
+</pre>
+            </td>
+
+            <td>
+<pre>
+try
+{
+    $db->execute();
+}
+catch (\RuntimeException $e)
+{
+    $this->setError($e->getMessage());
+
+    return false;
+}
+</pre>
+            </td>
+        </tr>
+
+        <tr>
+            <td>JDispatcher (plugin trigger)</td>
+
+            <td>
 <pre>
 
 $dispatcher = JDispatcher::getInstance();
 JPluginHelper::importPlugin('jmailalert');
 $dispatcher->trigger(
-	'jmaOnAfterAlertSubscriptionDelete',
-	array($context, (object) $subscription)
+    'jmaOnAfterAlertSubscriptionDelete',
+    array($context, (object) $subscription)
 );
 </pre>
-	</td>
-	<td>
+            </td>
+
+            <td>
 <pre>
 use Joomla\CMS\Plugin\PluginHelper;
 
 PluginHelper::importPlugin('jmailalert');
 Factory::getApplication()->triggerEvent(
-	'jmaOnAfterAlertSubscriptionDelete',
-	array($context, (object) $subscription)
+    'jmaOnAfterAlertSubscriptionDelete',
+    array($context, (object) $subscription)
 );
 </pre>
-	</td>
-</tr>
+            </td>
+        </tr>
 
-<tr>
-	<td>JDocument</td>
-	<td>
+        <tr>
+            <td>JDocument</td>
+
+            <td>
 <pre>
 
 $document->addStyleSheet(Uri::base() .
-'/components/com_jmailalerts/assets/css/jmailalerts.css');
+'/media/com_jmailalerts/css/jmailalerts.css');
 </pre>
-	</td>
-	<td>
+            </td>
+
+            <td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('stylesheet',
-'/components/com_jmailalerts/assets/css/jmailalerts.css');
+'/media/com_jmailalerts/css/jmailalerts.css');
 </pre>
-	</td>
-</tr>
+            </td>
+        </tr>
 
-<tr>
-	<td>JDocument</td>
-	<td>
+        <tr>
+            <td>JDocument</td>
+
+            <td>
 <pre>
 
 $document->addScript(Uri::root(true) .
 '/plugins/system/tjupdates/tjupdates.js');
 </pre>
-	</td>
-	<td>
+            </td>
+
+            <td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('script',
 '/plugins/system/tjupdates/tjupdates.js');
 </pre>
-	</td>
-</tr>
+            </td>
+        </tr>
 
-<tr>
-	<td>JError</td>
-	<td>JError::raiseWarning(500, $e->getMessage());</td>
-	<td>$this->setMessage($e->getMessage(), 'error');</td>
-</tr>
+        <tr>
+            <td>JError</td>
 
-<tr>
-	<td>JError</td>
-	<td>
+            <td>JError::raiseWarning(500, $e->getMessage());</td>
+
+            <td>$this->setMessage($e->getMessage(), 'error');</td>
+        </tr>
+
+        <tr>
+            <td>JError</td>
+
+            <td>
 <pre>
-
 
 JError::raiseError(500, $model->getError());
 </pre>
-	</td>
-	<td>
+            </td>
+
+            <td>
 <pre>
 use Joomla\CMS\Factory;
 
 $app = Factory::getApplication();
 $app->enqueueMessage($model->getError(), 'error');
 </pre>
-	</td>
-</tr>
+            </td>
+        </tr>
 
-<tr>
+        <tr>
+            <td>JFactory</td>
 
-<td>JFactory</td>
-
-<td>
-
+            <td>
 <pre>
+
+
 $app      = JFactory::getApplication();
 $frommail = $app->getCfg('mailfrom');
 $site     = $app->getCfg('sitename');
 </pre>
+            </td>
 
-</td>
-
-<td>
-
-<pre>use Joomla\CMS\Factory;
+            <td>
+<pre>
+use Joomla\CMS\Factory;
 
 $app      = Factory::getApplication();
 $frommail = $app->get('mailfrom');
 $site     = $app->get('sitename');
 </pre>
+            </td>
+        </tr>
 
-</td>
+        <tr>
+            <td>JFactory</td>
 
-</tr>
-
-<tr>
-
-<td>JFactory</td>
-
-<td>
-
+            <td>
 <pre>
+
+
 $app = JFactory::getApplication();
 if ($app->issite()) {}
 if ($app->isAdmin()) {}
 </pre>
+            </td>
 
-</td>
-
-<td>
-
-<pre>use Joomla\CMS\Factory;
+            <td>
+<pre>
+use Joomla\CMS\Factory;
 
 $app = Factory::getApplication();
 if ($app->isClient('site')) {}
 if ($app->isClient('administrator')) {}
 </pre>
+            </td>
+        </tr>
 
-</td>
+        <tr>
+            <td>JFactory</td>
 
-</tr>
+            <td>$xml = Factory::getXML(JPATH_COMPONENT . '/jmailalerts.xml');</td>
 
-<tr>
+            <td>$xml = simplexml_load_file(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+        </tr>
 
-<td>JFactory</td>
 
-<td>$xml = Factory::getXML(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+        <tr>
+            <td>JFile</td>
 
-<td>$xml = simplexml_load_file(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+            <td>File::read($cssfile);</td>
 
-</tr>
+            <td>file_get_contents($cssfile);</td>
+        </tr>
 
-<tr>
+        <tr>
+            <td>JFormField</td>
 
-<td>JFile</td>
-
-<td>File::read($cssfile);</td>
-
-<td>file_get_contents($cssfile);</td>
-
-</tr>
-
-<tr>
-
-<td>JFormField</td>
-
-<td>
-
-<pre>class JFormFieldLegend extends JFormField
+            <td>
+<pre>
+class JFormFieldLegend extends JFormField
 </pre>
+            </td>
 
-</td>
-
-<td>
-
-<pre>use Joomla\CMS\Form\FormField;
+            <td>
+<pre>
+use Joomla\CMS\Form\FormField;
 
 class JFormFieldLegend extends FormField
+</pr>
+            </td>
+        </tr>
 
-			</pre>
+        <tr>
+            <td>JHtml</td>
 
-</td>
+            <td>
+<pre>
 
-</tr>
-
-<tr>
-
-<td>JHtml</td>
-
-<td>
-
-<pre>JHtml::_('behavior.tabstate');
+JHtml::_('behavior.tabstate');
 JHtml::_('behavior.tooltip');
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('form.token');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('jquery.framework');
+JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
 JHtml::_('searchtools.sort' ...)
 </pre>
+            </td>
 
-</td>
-
-<td>
-
-<pre>use Joomla\CMS\HTML\HTMLHelper;
+            <td>
+<pre>
+use Joomla\CMS\HTML\HTMLHelper;
 
 // Removed 'behavior.tabstate' in J4
 HTMLHelper::_('bootstrap.tooltip');
@@ -267,99 +315,206 @@ HTMLHelper::_('form.token');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('searchtools.sort'...)
 </pre>
+            </td>
+        </tr>
 
-</td>
+        <tr>
+            <td>JHtml::_('select.genericList', ...)</td>
 
-</tr>
+            <td>
+<pre>
 
-<tr>
 
-<td>JParameter</td>
 
-<td>
 
-<pre>$params = new JParameter($jPlugin->params);
+
+
+
+
+
+return JHtml::_(
+    'select.genericList',
+    $alerts,
+    'alerts',
+    'class="inputbox"',
+    'val',
+    'text', ''
+);
 </pre>
+            </td>
 
-</td>
+            <td>
+<pre>
+use Joomla\CMS\HTML\HTMLHelper;
 
-<td>
+$listOptions = array();
+$listOptions['option.key']  = 'val';
+$listOptions['option.text'] = 'text';
+$listOptions['class']       = 'inputbox';
+$listOptions['list.select'] = '';
 
-<pre>$params = new Registry;
+return HTMLHelper::_(
+    'select.genericlist',
+    $alerts,
+    'alerts',
+    $listOptions
+);
+</pre>
+            </td>
+        </tr>
+
+        <tr>
+            <td>JHtml::_('jgrid.checkedout', ...)</td>
+
+            <td>
+<pre>
+
+
+JHtml::_(
+    'jgrid.checkedout',
+    $i,
+    $item->editor,
+    $item->checked_out_time,
+    'frequencies.',
+    $canCheckin
+);
+</pre>
+            </td>
+
+            <td>
+<pre>
+use Joomla\CMS\HTML\HTMLHelper;
+
+HTMLHelper::_(
+    'jgrid.checkedout',
+    $i,
+    $item->editor,
+    $item->checked_out_time,
+    'frequencies.',
+    $canCheckin
+);
+</pre>
+            </td>
+        </tr>
+
+        <tr>
+            <td>JHtml::_('sortablelist.sortable', ...)</td>
+
+            <td>
+<pre>
+
+
+JHtml::_(
+    'sortablelist.sortable',
+    'frequencyList',
+    'adminForm',
+    strtolower($listDirn),
+    $saveOrderingUrl
+);
+</pre>
+            </td>
+
+            <td>
+<pre>
+use Joomla\CMS\HTML\HTMLHelper;
+
+HTMLHelper::_(
+    'sortablelist.sortable',
+    'frequencyList',
+    'adminForm',
+    strtolower($listDirn),
+    $saveOrderingUrl
+);
+</pre>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>JInstallerHelper</td>
+
+            <td>
+<pre>
+jimport('joomla.installer.helper');
+$queries = JInstallerHelper::splitSql($buffer);
+</pre>
+            </td>
+
+            <td>
+<pre>
+
+$queries = \JDatabaseDriver::splitSql($buffer);
+</pre>
+            </td>
+        </tr>
+
+        <tr>
+            <td>JParameter</td>
+
+            <td>
+<pre>
+
+$params = new JParameter($jPlugin->params);
+</pre>
+            </td>
+
+            <td>
+<pre>
+$params = new Registry;
 $params->loadString($jPlugin->params);
 </pre>
+            </td>
+        </tr>
 
-</td>
+        <tr>
+            <td>JResponse</td>
 
-</tr>
+            <td>
+<pre>
+$body = JResponse::getBody();
+JResponse::setBody($body);
+</pre>
+            </td>
 
-<tr>
+            <td>
+<pre>
+$app = Factory::getApplication();
+$body = $app->getBody();
+$app->setBody($body);
+</pre>
+            </td>
+        </tr>
 
-<td>-</td>
+        <tr>
+            <td>JToolBarHelper</td>
 
-<td>JToolBarHelper::(...); eg: JToolBarHelper::addNew('frequency.add', 'JTOOLBAR_NEW');</td>
+            <td>
+<pre>
 
-<td>use Joomla\CMS\Toolbar\ToolbarHelper; ToolbarHelper::(...); eg: ToolbarHelper::addNew('frequency.add', 'JTOOLBAR_NEW');|</td>
 
-</tr>
+JToolBarHelper::(...);
+eg: JToolBarHelper::addNew('frequency.add',
+'JTOOLBAR_NEW');
+</pre>
+            </td>
 
-<tr>
+            <td>
+<pre>
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
-<td>JResponse</td>
+ToolbarHelper::(...);
+eg: ToolbarHelper::addNew('frequency.add',
+'JTOOLBAR_NEW');
+</pre>
+            </td>
+        </tr>
 
-<td>$body = JResponse::getBody(); JResponse::setBody($body);</td>
-
-<td>$app = Factory::getApplication(); $body = $app->getBody(); $app->setBody($body);</td>
-
-</tr>
-
-<tr>
-
-<td>-</td>
-
-<td>jimport('joomla.installer.helper'); $queries = JInstallerHelper::splitSql($buffer);</td>
-
-<td>$queries = \JDatabaseDriver::splitSql($buffer);</td>
-
-</tr>
-
-<tr>
-
-<td>-</td>
-
-<td>
-
-<pre>if ($db->getErrorNum())
-{
-	$this->setError($db->getErrorMsg()) ;
-
-	return false;
-}
-				</pre>
-
-</td>
-
-<td>
-
-<pre>try
-{
-	$db->execute();
-}
-catch (\RuntimeException $e)
-{
-	$this->setError($e->getMessage());
-
-	return false;
-}
-				</pre>
-
-</td>
-
-</tr>
-
-</tbody>
-
+    </tbody>
 </table>
+
+</body>
+</html>
