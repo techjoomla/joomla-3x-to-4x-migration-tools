@@ -1,209 +1,209 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Joomla 3 to 4 - remove deprecated</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <style type="text/css">
-        .table { background-color:#FFFFE0; border-collapse:collapse; width: 100%; color:#000;}
-        .table th { background-color:#BDB76B; color:white;}
-        .table td, .table th { padding:5px; border:0; }
-        .table td { border:1px dotted #BDB76B;}
-    </style>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Joomla 3 to 4 - remove deprecated</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<style type="text/css">
+		.table { background-color:#FFFFE0; border-collapse:collapse; width: 100%; color:#000;}
+		.table th { background-color:#BDB76B; color:white;}
+		.table td, .table th { padding:5px; border:0; }
+		.table td { border:1px dotted #BDB76B;}
+	</style>
 </head>
 
 <body>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Area</th>
-            <th>Old Code</th>
-            <th>New Code</th>
-        </tr>
-    </thead>
+<table class="table" border="1">
+	<thead>
+		<tr>
+			<th>Area</th>
+			<th>Old Code</th>
+			<th>New Code</th>
+		</tr>
+	</thead>
 
-    <tbody>
+	<tbody>
 
-        <tr>
-            <td>JApplicationHelper</td>
+		<tr>
+			<td>JApplicationHelper</td>
 
-            <td>
+			<td>
 <pre>
 
 
 $data = JApplicationHelper::parseXMLInstallFile(JPATH_SITE .
 '/plugins/emailalerts/abc.xml');
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Installer\Installer;
 
 Installer::parseXMLInstallFile(JPATH_SITE .
 '/plugins/emailalerts/abc.xml');
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JArrayHelper</td>
+		<tr>
+			<td>JArrayHelper</td>
 
-            <td>
+			<td>
 <pre>
 
 JArrayHelper::toInteger($pks);
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\Utilities\ArrayHelper;
 ArrayHelper::toInteger($pks);
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JDatabase</td>
-            <td>$db->query();</td>
-            <td>$db->execute();</td>
-        </tr>
+		<tr>
+			<td>JDatabase</td>
+			<td>$db->query();</td>
+			<td>$db->execute();</td>
+		</tr>
 
-        <tr>
-            <td>JDatabase</td>
+		<tr>
+			<td>JDatabase</td>
 
-            <td>
+			<td>
 <pre>
 if ($db->getErrorNum())
 {
-    $this->setError($db->getErrorMsg()) ;
+	$this->setError($db->getErrorMsg()) ;
 
-    return false;
+	return false;
 }
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 try
 {
-    $db->execute();
+	$db->execute();
 }
 catch (\RuntimeException $e)
 {
-    $this->setError($e->getMessage());
+	$this->setError($e->getMessage());
 
-    return false;
+	return false;
 }
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JDispatcher (plugin trigger)</td>
+		<tr>
+			<td>JDispatcher (plugin trigger)</td>
 
-            <td>
+			<td>
 <pre>
 
 $dispatcher = JDispatcher::getInstance();
 JPluginHelper::importPlugin('jmailalert');
 $dispatcher->trigger(
-    'jmaOnAfterAlertSubscriptionDelete',
-    array($context, (object) $subscription)
+	'jmaOnAfterAlertSubscriptionDelete',
+	array($context, (object) $subscription)
 );
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Plugin\PluginHelper;
 
 PluginHelper::importPlugin('jmailalert');
 Factory::getApplication()->triggerEvent(
-    'jmaOnAfterAlertSubscriptionDelete',
-    array($context, (object) $subscription)
+	'jmaOnAfterAlertSubscriptionDelete',
+	array($context, (object) $subscription)
 );
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JDocument</td>
+		<tr>
+			<td>JDocument</td>
 
-            <td>
+			<td>
 <pre>
 
 $document->addStyleSheet(Uri::base() .
 '/media/com_jmailalerts/css/jmailalerts.css');
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('stylesheet',
 '/media/com_jmailalerts/css/jmailalerts.css');
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JDocument</td>
+		<tr>
+			<td>JDocument</td>
 
-            <td>
+			<td>
 <pre>
 
 $document->addScript(Uri::root(true) .
 '/plugins/system/tjupdates/tjupdates.js');
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('script',
 '/plugins/system/tjupdates/tjupdates.js');
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JError</td>
+		<tr>
+			<td>JError</td>
 
-            <td>JError::raiseWarning(500, $e->getMessage());</td>
+			<td>JError::raiseWarning(500, $e->getMessage());</td>
 
-            <td>$this->setMessage($e->getMessage(), 'error');</td>
-        </tr>
+			<td>$this->setMessage($e->getMessage(), 'error');</td>
+		</tr>
 
-        <tr>
-            <td>JError</td>
+		<tr>
+			<td>JError</td>
 
-            <td>
+			<td>
 <pre>
 
 JError::raiseError(500, $model->getError());
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Factory;
 
 $app = Factory::getApplication();
 $app->enqueueMessage($model->getError(), 'error');
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JFactory</td>
+		<tr>
+			<td>JFactory</td>
 
-            <td>
+			<td>
 <pre>
 
 
@@ -211,9 +211,9 @@ $app      = JFactory::getApplication();
 $frommail = $app->getCfg('mailfrom');
 $site     = $app->getCfg('sitename');
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Factory;
 
@@ -221,13 +221,13 @@ $app      = Factory::getApplication();
 $frommail = $app->get('mailfrom');
 $site     = $app->get('sitename');
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JFactory</td>
+		<tr>
+			<td>JFactory</td>
 
-            <td>
+			<td>
 <pre>
 
 
@@ -235,9 +235,9 @@ $app = JFactory::getApplication();
 if ($app->issite()) {}
 if ($app->isAdmin()) {}
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Factory;
 
@@ -245,48 +245,48 @@ $app = Factory::getApplication();
 if ($app->isClient('site')) {}
 if ($app->isClient('administrator')) {}
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JFactory</td>
+		<tr>
+			<td>JFactory</td>
 
-            <td>$xml = Factory::getXML(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+			<td>$xml = Factory::getXML(JPATH_COMPONENT . '/jmailalerts.xml');</td>
 
-            <td>$xml = simplexml_load_file(JPATH_COMPONENT . '/jmailalerts.xml');</td>
-        </tr>
+			<td>$xml = simplexml_load_file(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+		</tr>
 
 
-        <tr>
-            <td>JFile</td>
+		<tr>
+			<td>JFile</td>
 
-            <td>File::read($cssfile);</td>
+			<td>File::read($cssfile);</td>
 
-            <td>file_get_contents($cssfile);</td>
-        </tr>
+			<td>file_get_contents($cssfile);</td>
+		</tr>
 
-        <tr>
-            <td>JFormField</td>
+		<tr>
+			<td>JFormField</td>
 
-            <td>
+			<td>
 <pre>
 class JFormFieldLegend extends JFormField
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Form\FormField;
 
 class JFormFieldLegend extends FormField
 </pr>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JHtml</td>
+		<tr>
+			<td>JHtml</td>
 
-            <td>
+			<td>
 <pre>
 
 JHtml::_('behavior.tabstate');
@@ -301,9 +301,9 @@ JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
 JHtml::_('searchtools.sort' ...)
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
@@ -319,13 +319,13 @@ HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('searchtools.sort'...)
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JHtml::_('select.genericList', ...)</td>
+		<tr>
+			<td>JHtml::_('select.genericList', ...)</td>
 
-            <td>
+			<td>
 <pre>
 
 
@@ -337,17 +337,17 @@ HTMLHelper::_('searchtools.sort'...)
 
 
 return JHtml::_(
-    'select.genericList',
-    $alerts,
-    'alerts',
-    'class="inputbox"',
-    'val',
-    'text', ''
+	'select.genericList',
+	$alerts,
+	'alerts',
+	'class="inputbox"',
+	'val',
+	'text', ''
 );
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
@@ -358,141 +358,141 @@ $listOptions['class']       = 'inputbox';
 $listOptions['list.select'] = '';
 
 return HTMLHelper::_(
-    'select.genericlist',
-    $alerts,
-    'alerts',
-    $listOptions
+	'select.genericlist',
+	$alerts,
+	'alerts',
+	$listOptions
 );
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JHtml::_('jgrid.checkedout', ...)</td>
+		<tr>
+			<td>JHtml::_('jgrid.checkedout', ...)</td>
 
-            <td>
+			<td>
 <pre>
 
 
 JHtml::_(
-    'jgrid.checkedout',
-    $i,
-    $item->editor,
-    $item->checked_out_time,
-    'frequencies.',
-    $canCheckin
+	'jgrid.checkedout',
+	$i,
+	$item->editor,
+	$item->checked_out_time,
+	'frequencies.',
+	$canCheckin
 );
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_(
-    'jgrid.checkedout',
-    $i,
-    $item->editor,
-    $item->checked_out_time,
-    'frequencies.',
-    $canCheckin
+	'jgrid.checkedout',
+	$i,
+	$item->editor,
+	$item->checked_out_time,
+	'frequencies.',
+	$canCheckin
 );
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JHtml::_('sortablelist.sortable', ...)</td>
+		<tr>
+			<td>JHtml::_('sortablelist.sortable', ...)</td>
 
-            <td>
+			<td>
 <pre>
 
 
 JHtml::_(
-    'sortablelist.sortable',
-    'frequencyList',
-    'adminForm',
-    strtolower($listDirn),
-    $saveOrderingUrl
+	'sortablelist.sortable',
+	'frequencyList',
+	'adminForm',
+	strtolower($listDirn),
+	$saveOrderingUrl
 );
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_(
-    'sortablelist.sortable',
-    'frequencyList',
-    'adminForm',
-    strtolower($listDirn),
-    $saveOrderingUrl
+	'sortablelist.sortable',
+	'frequencyList',
+	'adminForm',
+	strtolower($listDirn),
+	$saveOrderingUrl
 );
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
 
-        <tr>
-            <td>JInstallerHelper</td>
+		<tr>
+			<td>JInstallerHelper</td>
 
-            <td>
+			<td>
 <pre>
 jimport('joomla.installer.helper');
 $queries = JInstallerHelper::splitSql($buffer);
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 
 $queries = \JDatabaseDriver::splitSql($buffer);
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JParameter</td>
+		<tr>
+			<td>JParameter</td>
 
-            <td>
+			<td>
 <pre>
 
 $params = new JParameter($jPlugin->params);
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 $params = new Registry;
 $params->loadString($jPlugin->params);
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JResponse</td>
+		<tr>
+			<td>JResponse</td>
 
-            <td>
+			<td>
 <pre>
 $body = JResponse::getBody();
 JResponse::setBody($body);
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 $app = Factory::getApplication();
 $body = $app->getBody();
 $app->setBody($body);
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-        <tr>
-            <td>JToolBarHelper</td>
+		<tr>
+			<td>JToolBarHelper</td>
 
-            <td>
+			<td>
 <pre>
 
 
@@ -500,9 +500,9 @@ JToolBarHelper::(...);
 eg: JToolBarHelper::addNew('frequency.add',
 'JTOOLBAR_NEW');
 </pre>
-            </td>
+			</td>
 
-            <td>
+			<td>
 <pre>
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
@@ -510,10 +510,10 @@ ToolbarHelper::(...);
 eg: ToolbarHelper::addNew('frequency.add',
 'JTOOLBAR_NEW');
 </pre>
-            </td>
-        </tr>
+			</td>
+		</tr>
 
-    </tbody>
+	</tbody>
 </table>
 
 </body>
