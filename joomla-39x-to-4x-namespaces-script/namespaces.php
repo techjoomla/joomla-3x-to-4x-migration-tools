@@ -483,9 +483,10 @@ class J3Namespaces
 
 			foreach ($this->nameSpaces as $oldClassName => $nameSpace)
 			{
-				$position = strpos($line, $oldClassName);
-				$singleLineCommentPosition = strpos($line, '//');
-				$multiLinePosition = strpos($line, '*');
+				$position                        = strpos($line, $oldClassName);
+				$singleLineCommentPosition       = strpos($line, '//');
+				$multiLinePosition               = strpos($line, '*');
+				$scopeResolutionOperatorPosition = strpos($line, '::');
 
 				// Find old class name used in this line
 				// Ignore lines starting with // or *
@@ -495,12 +496,21 @@ class J3Namespaces
 					$tmp = explode("\\", $mappedNamespace);
 					$end = end($tmp);
 
+					// Ensure - no false positives are replaced
+					// Eg: JHtmlSidebar:: => HTMLHelperSidebar:: shall be avoided
+					$tempOldClassName = $oldClassName;
+
+					if ($scopeResolutionOperatorPosition !== false)
+					{
+						$tempOldClassName = $oldClassName . '::';
+					}
+
 					/*if (
-						!preg_match("/^[a-zA-Z]$/", substr($line, strpos($line, $oldClassName) - 1, 1))
+						!preg_match("/^[a-zA-Z]$/", substr($line, strpos($line, $tempOldClassName) - 1, 1))
 						&&
-						!preg_match("/^[a-zA-Z]$/", substr($line, strlen($oldClassName) + strpos($line, $oldClassName), 1))
+						!preg_match("/^[a-zA-Z]$/", substr($line, strlen($tempOldClassName) + strpos($line, $oldClassName), 1))
 					)*/
-					if (strpos($line, $oldClassName))
+					if (strpos($line, $tempOldClassName))
 					{
 						$updatedLine = str_replace($oldClassName, $end, $line);
 						$line = $updatedLine;
