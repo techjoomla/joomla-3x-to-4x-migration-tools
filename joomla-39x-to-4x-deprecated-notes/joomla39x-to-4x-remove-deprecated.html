@@ -6,10 +6,10 @@
 	<title>Joomla 3 to 4 - remove deprecated</title>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<style type="text/css">
-		.table { background-color:#FFFFE0; border-collapse:collapse; width: 100%; color:#000;}
+		.table { background-color:#FFFFE0; border-collapse:collapse; width: 100%; color:#000; font-size:0.95rem; table-layout: fixed;}
 		.table th { background-color:#BDB76B; color:white;}
-		.table td, .table th { padding:5px; border:0; }
-		.table td { border:1px dotted #BDB76B;}
+		.table td, .table th { padding:5px; border:0;}
+		.table td { border:1px dotted #BDB76B; word-break: break-all;}
 
 		.blue {color:blue;}
 		.red {color:red;}
@@ -23,9 +23,9 @@
 <table class="table" border="1">
 	<thead>
 		<tr>
-			<th>Area</th>
-			<th>Old Code</th>
-			<th>New Code</th>
+			<th width="15%">Area</th>
+			<th width="45%">Old Code</th>
+			<th width="50%">New Code</th>
 		</tr>
 	</thead>
 
@@ -37,13 +37,14 @@
 <pre>
 
 
-// Split context into component and optional section
+// Split context into component
+// and optional section
 $parts = FieldsHelper::extract($search);
 
 if ($parts)
 {
-	$this->setstate('filter.component', $parts[0]);
-	$this->setstate('filter.section', $parts[1]);
+  $this->setstate('filter.component', $parts[0]);
+  $this->setstate('filter.section', $parts[1]);
 }
 </pre>
 			</td>
@@ -53,20 +54,23 @@ if ($parts)
 <pre>
 if (JVERSION < '4.0.0')
 {
-	// Split context into component and optional section
-	$parts = FieldsHelper::extract($search);
+  // Split context into component
+  // and optional section
+  $parts = FieldsHelper::extract($search);
 
-	if ($parts)
-	{
-		$this->setstate('filter.component', $parts[0]);
-		$this->setstate('filter.section', $parts[1]);
-	}
+  if ($parts)
+  {
+    $this->setstate('filter.component', $parts[0]);
+    $this->setstate('filter.section', $parts[1]);
+  }
 }
 </pre>
 			</td>
 		</tr>
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JApplicationHelper</td>
+			<td>JApplicationHelper::parseXMLInstallFile</td>
 
 			<td>
 <pre>
@@ -87,8 +91,10 @@ Installer::parseXMLInstallFile(JPATH_SITE .
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JArrayHelper</td>
+			<td>JArrayHelper::toInteger</td>
 
 			<td>
 <pre>
@@ -107,14 +113,18 @@ ArrayHelper::toInteger($pks);
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JDatabase</td>
+			<td>JDatabase query</td>
 			<td>$db->query();</td>
 			<td>$db->execute();</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JDatabase</td>
+			<td>JDatabase getErrorNum getErrorMsg</td>
 
 			<td>
 <pre>
@@ -143,8 +153,10 @@ catch (\RuntimeException $e)
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JDispatcher (plugin trigger)</td>
+			<td>JDispatcher trigger (plugin trigger)</td>
 
 			<td>
 <pre>
@@ -173,8 +185,10 @@ Factory::getApplication()->triggerEvent(
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JDocument</td>
+			<td>JDocument addStyleSheet</td>
 
 			<td>
 <pre>
@@ -194,8 +208,10 @@ HTMLHelper::_('stylesheet',
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JDocument</td>
+			<td>JDocument addScript</td>
 
 			<td>
 <pre>
@@ -215,6 +231,8 @@ HTMLHelper::_('script',
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JDocument addScriptDeclaration</td>
 
@@ -243,14 +261,18 @@ Factory::getDocument()->addScriptDeclaration('
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JError</td>
+			<td>JError raiseWarning</td>
 
 			<td>JError::raiseWarning(500, $e->getMessage());</td>
 
 			<td>$this->setMessage($e->getMessage(), 'error');</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JError</td>
 
@@ -271,8 +293,10 @@ $app->enqueueMessage($model->getError(), 'error');
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JFactory</td>
+			<td>JFactory getCfg</td>
 
 			<td>
 <pre>
@@ -295,8 +319,10 @@ $site     = $app->get('sitename');
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JFactory</td>
+			<td>JFactory issite / isAdmin</td>
 
 			<td>
 <pre>
@@ -319,23 +345,41 @@ if ($app->isClient('administrator')) {}
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JFactory</td>
+			<td>JFactory getXML</td>
 
-			<td>$xml = Factory::getXML(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+			<td>
+<pre>
+$xml = Factory::getXML(
+	JPATH_COMPONENT . '/jmailalerts.xml'
+);
+</pre>
+			</td>
 
-			<td>$xml = simplexml_load_file(JPATH_COMPONENT . '/jmailalerts.xml');</td>
+			<td>
+<pre>
+$xml = simplexml_load_file(
+	JPATH_COMPONENT . '/jmailalerts.xml'
+);
+</pre>
+			</td>
 		</tr>
 
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JFile</td>
+			<td>JFile read</td>
 
 			<td>File::read($cssfile);</td>
 
 			<td>file_get_contents($cssfile);</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JFormField</td>
 
@@ -346,6 +390,7 @@ class JFormFieldLegend extends JFormField
 			</td>
 
 			<td>
+<span class="blue">Note class prefix still starts with 'J'</span>
 <pre>
 use Joomla\CMS\Form\FormField;
 
@@ -354,11 +399,15 @@ class JFormFieldLegend extends FormField
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JHtml</td>
 
 			<td>
 <pre>
+
+
 
 JHtml::_('behavior.modal', 'a.modal');
 JHtml::_('behavior.tabstate');
@@ -387,6 +436,7 @@ JHtml::_('searchtools.sort' ...)
 <pre>
 use Joomla\CMS\HTML\HTMLHelper;
 
+HTMLHelper::_('bootstrap.renderModal', 'a.modal');
 // Removed 'behavior.tabstate' in J4
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('bootstrap.tooltip');
@@ -410,6 +460,8 @@ if (JVERSION < '4.0.0')
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JHtml::_('select.genericList', ...)</td>
 
@@ -455,6 +507,8 @@ return HTMLHelper::_(
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JHtml::_('jgrid.checkedout', ...)</td>
 
@@ -489,6 +543,8 @@ HTMLHelper::_(
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JHtml::_('sortablelist.sortable', ...)</td>
 
@@ -522,6 +578,7 @@ HTMLHelper::_(
 		</tr>
 
 
+		<!--NEW ROW-->
 		<tr>
 			<td>JHtmlSidebar::addEntry</td>
 
@@ -531,7 +588,7 @@ HTMLHelper::_(
 
 JHtmlSidebar::addEntry(
 	Text::_('COM_JMAILALERTS_TITLE_DASHBOARD'),
-	'index.php?option=com_jmailalerts&view=dashboard',
+	'index.php?option=com_jmailalerts&view=cp',
 	$vName == 'dashboard'
 );
 </pre>
@@ -542,17 +599,20 @@ JHtmlSidebar::addEntry(
 <pre>
 if (JVERSION < '4.0.0')
 {
-	JHtmlSidebar::addEntry(
-		Text::_('COM_JMAILALERTS_TITLE_DASHBOARD'),
-		'index.php?option=com_jmailalerts&view=dashboard',
-		$vName == 'dashboard'
-	);
+  JHtmlSidebar::addEntry(
+	Text::_('COM_JMAILALERTS_TITLE_DASHBOARD'),
+	'index.php?option=com_jmailalerts&view=cp',
+	$vName == 'dashboard'
+  );
 }
 </pre>
 			</td>
 		</tr>
+
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JInstallerHelper</td>
+			<td>JInstallerHelper::splitSql</td>
 
 			<td>
 <pre>
@@ -569,6 +629,8 @@ $queries = \JDatabaseDriver::splitSql($buffer);
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JParameter</td>
 
@@ -587,8 +649,10 @@ $params->loadString($jPlugin->params);
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
-			<td>JResponse</td>
+			<td>JResponse getBody / setBody</td>
 
 			<td>
 <pre>
@@ -606,6 +670,8 @@ $app->setBody($body);
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
 		<tr>
 			<td>JToolBarHelper</td>
 
@@ -626,6 +692,64 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 ToolbarHelper::(...);
 eg: ToolbarHelper::addNew('frequency.add',
 'JTOOLBAR_NEW');
+</pre>
+			</td>
+		</tr>
+
+
+		<!--NEW ROW-->
+		<tr>
+			<td>
+Modal iframe example
+<br/>
+<br/>
+HTMLHelper::_('bootstrap.renderModal', '')
+			</td>
+
+			<td>
+<pre>
+HTMLHelper::_('behavior.modal', 'a.modal');
+
+&lt;a id="&lt;?php echo (int) $item->id; ?&gt;"
+	rel="{handler: 'iframe', size: {x:700, y: 600}}"
+	href="&lt;?php echo Uri::root(); ?&gt;"
+	class="modal"&gt;
+	&lt;?php echo Text::_('Preview'); ?&gt;
+&lt;/a&gt;
+</pre>
+			</td>
+
+			<td>
+<pre>
+&lt;?php
+$link = Uri::root();
+echo HTMLHelper::_(
+  'bootstrap.renderModal', 'previewModal',
+  array(
+	'url' => $link, 'title' => Text::_('Preview'),
+	'height' => '700px', 'width' => '600px',
+	'bodyHeight' => '70', 'modalWidth'=> '80',
+	'closeButton' => false, 'backdrop' => 'static',
+	'keyboard' => false,
+	'footer'      => '&lt;button
+	  type="button"
+	  class="btn"
+	  data-dismiss="modal"'
+	  . ' onclick="Joomla.iframeButtonClick(
+		{
+		 iframeSelector: \'#previewModal\',
+		 buttonSelector: \'#closeBtn\'
+		}
+       ) "&gt;'
+       . Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '&lt;/button&gt;')
+);
+?>
+
+&lt;a id ="&lt;?php echo (int) $item->id; ?&gt;"
+	onclick="document.getElementById('previewModal').open();"
+	href="javascript:void(0);"&gt;
+	&lt;?php echo Text::_('COM_JMAILALERTS_PREVIEW'); ?&gt;
+&lt;/a&gt;
 </pre>
 			</td>
 		</tr>
