@@ -3,7 +3,7 @@
 <head>
 	<meta charset='utf-8'>
 	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
-	<title>Joomla 3 to 4 - remove deprecated</title>
+	<title>Alternatives for Joomla39x deprecated classes, methods for creating common code package for Joomla 3.9.x and Joomla 4.x</title>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<style type="text/css">
 		.table { background-color:#FFFFE0; border-collapse:collapse; width: 100%; color:#000; font-size:0.95rem; table-layout: fixed;}
@@ -18,7 +18,7 @@
 
 <body>
 
-<h2>Alternatives for Joomla39x deprecated classes, methods</h2>
+<h2>Alternatives for Joomla39x deprecated classes, methods for creating common code package for Joomla 3.9.x and Joomla 4.x</h2>
 
 <table class="table" border="1">
 	<thead>
@@ -30,6 +30,40 @@
 	</thead>
 
 	<tbody>
+
+		<tr>
+			<td>IMP tips</td>
+
+			<td></td>
+
+			<td>
+<strong>HTMLHelper:</strong> Always specify relative path eg:
+<br/>
+HTMLHelper::_('stylesheet', '/components/com_jmailalerts/css/jmailalerts.css');
+<hr/>
+
+<strong>Javascript:</strong> Always Use $document->addScriptDeclaration() for adding inline JS code
+<hr/>
+
+<strong>JFormField class names:</strong> Needs to start with JFormField prefix (for common package):
+eg:
+<pre>
+class JFormFieldTimeupdated extends FormField
+</pre>
+<hr/>
+
+<strong>Namespaces:</strong> Classes under different namespaces paths with same names - Use alias and use:
+eg:
+<br/>
+<pre>
+use Joomla\CMS\User\User;
+use Joomla\CMS\Table\User as UserTable;
+
+$userTable = UserTable::getTable();
+</pre>
+			</td>
+		</tr>
+
 		<tr>
 			<td>FieldsHelper::extract</td>
 
