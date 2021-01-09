@@ -10,6 +10,9 @@
 		.table th { background-color:#BDB76B; color:white;}
 		.table td, .table th { padding:5px; border:0; }
 		.table td { border:1px dotted #BDB76B;}
+
+		.blue {color:blue;}
+		.red {color:red;}
 	</style>
 </head>
 
@@ -27,7 +30,41 @@
 	</thead>
 
 	<tbody>
+		<tr>
+			<td>FieldsHelper::extract</td>
 
+			<td>
+<pre>
+
+
+// Split context into component and optional section
+$parts = FieldsHelper::extract($search);
+
+if ($parts)
+{
+	$this->setstate('filter.component', $parts[0]);
+	$this->setstate('filter.section', $parts[1]);
+}
+</pre>
+			</td>
+
+			<td>
+<span class="blue">Add only for common package for J3.x and 4.x</span>
+<pre>
+if (JVERSION < '4.0.0')
+{
+	// Split context into component and optional section
+	$parts = FieldsHelper::extract($search);
+
+	if ($parts)
+	{
+		$this->setstate('filter.component', $parts[0]);
+		$this->setstate('filter.section', $parts[1]);
+	}
+}
+</pre>
+			</td>
+		</tr>
 		<tr>
 			<td>JApplicationHelper</td>
 
@@ -56,6 +93,7 @@ Installer::parseXMLInstallFile(JPATH_SITE .
 			<td>
 <pre>
 
+
 JArrayHelper::toInteger($pks);
 </pre>
 			</td>
@@ -63,6 +101,7 @@ JArrayHelper::toInteger($pks);
 			<td>
 <pre>
 use Joomla\Utilities\ArrayHelper;
+
 ArrayHelper::toInteger($pks);
 </pre>
 			</td>
@@ -111,6 +150,7 @@ catch (\RuntimeException $e)
 <pre>
 
 $dispatcher = JDispatcher::getInstance();
+
 JPluginHelper::importPlugin('jmailalert');
 $dispatcher->trigger(
 	'jmaOnAfterAlertSubscriptionDelete',
@@ -121,6 +161,7 @@ $dispatcher->trigger(
 
 			<td>
 <pre>
+use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 
 PluginHelper::importPlugin('jmailalert');
@@ -170,6 +211,34 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('script',
 '/plugins/system/tjupdates/tjupdates.js');
+</pre>
+			</td>
+		</tr>
+
+		<tr>
+			<td>JDocument addScriptDeclaration</td>
+
+			<td>
+<span class="red">Avoid inline javascript eg:</span>
+<pre>
+
+&lt;script type="text/javascript"&gt;
+	jQuery(document).ready(function() {
+		// blah blah
+	});
+&lt;/script&gt;
+</pre>
+			</td>
+
+			<td>
+<pre>
+use Joomla\CMS\Factory;
+
+Factory::getDocument()->addScriptDeclaration('
+	jQuery(document).ready(function() {
+		// blah blah
+	});
+');
 </pre>
 			</td>
 		</tr>
@@ -291,6 +360,7 @@ class JFormFieldLegend extends FormField
 			<td>
 <pre>
 
+JHtml::_('behavior.modal', 'a.modal');
 JHtml::_('behavior.tabstate');
 JHtml::_('behavior.tooltip');
 JHtml::_('bootstrap.tooltip');
@@ -302,6 +372,14 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
 JHtml::_('searchtools.sort' ...)
+
+
+
+
+
+
+
+
 </pre>
 			</td>
 
@@ -320,6 +398,14 @@ HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('searchtools.sort'...)
+</pre>
+
+<span class="blue">Add only for common package for J3.x and 4.x</span>
+<pre>
+if (JVERSION < '4.0.0')
+{
+	HTMLHelper::_('behavior.tabstate');
+}
 </pre>
 			</td>
 		</tr>
@@ -436,6 +522,35 @@ HTMLHelper::_(
 		</tr>
 
 
+		<tr>
+			<td>JHtmlSidebar::addEntry</td>
+
+			<td>
+<pre>
+
+
+JHtmlSidebar::addEntry(
+	Text::_('COM_JMAILALERTS_TITLE_DASHBOARD'),
+	'index.php?option=com_jmailalerts&view=dashboard',
+	$vName == 'dashboard'
+);
+</pre>
+			</td>
+
+			<td>
+<span class="blue">Add only for common package for J3.x and 4.x</span>
+<pre>
+if (JVERSION < '4.0.0')
+{
+	JHtmlSidebar::addEntry(
+		Text::_('COM_JMAILALERTS_TITLE_DASHBOARD'),
+		'index.php?option=com_jmailalerts&view=dashboard',
+		$vName == 'dashboard'
+	);
+}
+</pre>
+			</td>
+		</tr>
 		<tr>
 			<td>JInstallerHelper</td>
 
