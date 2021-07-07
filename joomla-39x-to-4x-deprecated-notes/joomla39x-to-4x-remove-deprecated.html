@@ -788,6 +788,26 @@ echo HTMLHelper::_(
 			</td>
 		</tr>
 
+
+		<!--NEW ROW-->
+		<tr>
+			<td>JFactory::getApplication()->redirect</td>
+
+			<td>
+<pre>
+JFactory::getApplication()->redirect(url, message);
+</pre>
+			</td>
+
+			<td>
+<pre>
+JFactory::getApplication()->enqueueMessage(message, message_type);
+JFactory::getApplication()->redirect(url);
+</pre>
+			</td>
+		</tr>
+
+
 	</tbody>
 </table>
 
