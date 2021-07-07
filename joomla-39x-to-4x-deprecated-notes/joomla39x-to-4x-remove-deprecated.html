@@ -801,6 +801,8 @@ JFactory::getApplication()->redirect(url, message);
 
 			<td>
 <pre>
+use Joomla\CMS\Factory;
+
 Factory::getApplication()->enqueueMessage(message, message_type);
 Factory::getApplication()->redirect(url);
 </pre>
