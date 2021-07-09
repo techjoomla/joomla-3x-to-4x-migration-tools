@@ -810,6 +810,46 @@ Factory::getApplication()->redirect(url);
 		</tr>
 
 
+		<!--NEW ROW-->
+		<tr>
+			<td>JFactory::getACL()->getActions</td>
+
+			<td>
+<pre>
+JFactory::getACL()->getActions(component, section);
+</pre>
+			</td>
+
+			<td>
+<pre>
+use Joomla\CMS\Access\Access;
+
+Access::getActionsFromFile(JPATH_ADMINISTRATOR . '/components/COMPONENT_NAME/access.xml', "/access/section[@name='SECTION_NAME']/");
+</pre>
+			</td>
+		</tr>
+
+
+		<!--NEW ROW-->
+		<tr>
+			<td>Factory::getACL()->getAssetRules;</td>
+
+			<td>
+<pre>
+JFactory::getACL()->getAssetRules('COMPONENT_NAME.SECTION_NAME.' . ITEM_ID);
+</pre>
+			</td>
+
+			<td>
+<pre>
+use Joomla\CMS\Access\Access;
+
+Access::getAssetRules('COMPONENT_NAME.SECTION_NAME.' . ITEM_ID);
+</pre>
+			</td>
+		</tr>
+
+
 	</tbody>
 </table>
 
